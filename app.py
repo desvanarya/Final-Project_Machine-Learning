@@ -22,7 +22,7 @@ def load_data():
 df = load_data()
 
 st.title("🚗 Prediksi Harga Mobil Bekas")
-st.markdown("Aplikasi Streamlit untuk memprediksi harga mobil bekas berdasarkan dataset **Car Dekho**.")
+st.markdown("Aplikasi Streamlit untuk memprediksi harga mobil bekas berdasarkan dataset **Car Dekho**. by Desvan Arya")
 
 # =========================
 # DATA CLEANING
