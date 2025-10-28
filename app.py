@@ -5,9 +5,10 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression, Ridge, Lasso
+from sklearn.linear_model import Ridge
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from statsmodels.stats.outliers_influence import variance_inflation_factor
+import datetime
 
 # =========================
 # LOAD DATA
@@ -33,7 +34,6 @@ df_clean['brand'] = df_clean['name'].str.split().str[0]
 df_clean.drop(columns=['name'], inplace=True)
 
 # Create car age
-import datetime
 current_year = datetime.datetime.now().year
 df_clean['car_age'] = current_year - df_clean['year']
 df_clean.drop(columns=['year'], inplace=True)
@@ -90,14 +90,19 @@ model = train_model()
 st.subheader("📊 Exploratory Data Analysis (EDA)")
 
 if st.checkbox("Tampilkan heatmap korelasi"):
-    corr = df_clean.corr(numeric_only=True)
-    fig, ax = plt.subplots(figsize=(8,5))
-    sns.heatmap(corr, annot=True, cmap="coolwarm", ax=ax)
+    st.write("Korelasi antar semua fitur numerik setelah encoding:")
+    # gunakan semua kolom numerik (termasuk hasil encoding)
+    encoded_df = pd.concat([X, y], axis=1)
+    corr = encoded_df.corr(numeric_only=True)
+
+    fig, ax = plt.subplots(figsize=(12, 10))
+    sns.heatmap(corr, cmap="coolwarm", center=0, annot=False)
+    ax.set_title("Heatmap Korelasi Semua Fitur Numerik", fontsize=14)
     st.pyplot(fig)
 
 if st.checkbox("Tampilkan distribusi harga"):
     fig, ax = plt.subplots(figsize=(8,5))
-    sns.histplot(df_clean['selling_price'], bins=40, kde=True, ax=ax)
+    sns.histplot(df_clean['selling_price'], bins=40, kde=True, ax=ax, color="skyblue")
     ax.set_title("Distribusi Harga Mobil")
     st.pyplot(fig)
 
@@ -127,17 +132,16 @@ if submitted:
         "owner": [owner]
     })
 
-    # One-hot encode input seperti X_train
+    # One-hot encode input agar sesuai dengan model
     input_df = pd.get_dummies(input_df, columns=["fuel", "seller_type", "transmission", "owner"], drop_first=True).astype(int)
 
-    # Pastikan semua kolom sama dengan X_train
+    # Pastikan kolom sama dengan X_train
     for col in X_train.columns:
         if col not in input_df.columns:
             input_df[col] = 0
     input_df = input_df[X_train.columns]
 
     prediction = model.predict(input_df)[0]
-
     st.success(f"💰 Prediksi Harga Mobil: **₹{prediction:,.0f}** (INR)")
 
 # =========================
