@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 
 """#Import Data"""
 
-df = pd.read_csv('/content/CAR DETAILS FROM CAR DEKHO.csv')
+df = pd.read_csv('CAR DETAILS FROM CAR DEKHO.csv')
 df
 
 """#Data Understanding"""
