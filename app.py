@@ -145,8 +145,7 @@ plt.show()
 plt.savefig("boxplot_brand_tier.png", dpi=300, bbox_inches='tight')  # simpan di folder kerja colab
 plt.show()
 
-from google.colab import files
-files.download("boxplot_brand_tier.png")
+#from google.colab import files
 
 """#Mapping Brand Tier"""
 
